@@ -136,7 +136,7 @@ void MainWindow::readTransactions(const QByteArray &data)
 
                 QString currentHash = transactionData.at(3);
                 bool hashMismatch = !previousHash.isEmpty() && (currentHash != previousHash);
-                QString calculatedHash = calculateHash256(transactionData.mid(0, 3));
+                QString calculatedHash = calculateHash256(transactionData.mid(0, 4));
 
                 ui->tableWidget->insertRow(row);
                 for (int col = 0; col < 3; ++col) {
@@ -183,4 +183,79 @@ void MainWindow::on_authButton_clicked()
 
     ui->linePincode->setText("");
 
+}
+
+bool is_sum_valid, is_address_valid, is_data_valid;
+
+
+void MainWindow::on_lineEditSum_textChanged(const QString &arg1)
+{
+    QString input = arg1.trimmed();
+
+    is_sum_valid = false;
+
+    if (input.length() == 7) {
+        for (const QChar &ch : input) {
+            if (!ch.isDigit()) {
+                is_sum_valid = false;
+                break;
+            }
+            else {
+                is_sum_valid = true;
+            }
+        }
+    }
+
+    ui->confirmData->setEnabled(is_sum_valid && is_address_valid && is_data_valid);
+}
+
+void MainWindow::on_lineEditAddress_textChanged(const QString &arg1)
+{
+    QString input = arg1.trimmed();
+
+    is_address_valid = false;
+
+    if (input.length() == 6) {
+        for (const QChar &ch : input) {
+            if (!ch.isDigit()) {
+                is_address_valid = false;
+                break;
+            }
+            else {
+                is_address_valid = true;
+            }
+        }
+    }
+
+    ui->confirmData->setEnabled(is_sum_valid && is_address_valid && is_data_valid);
+}
+
+
+void MainWindow::on_lineEditData_textChanged(const QString &arg1)
+{
+    is_data_valid = false;
+
+    QString input = arg1.trimmed();
+
+    if (input.length() == 19) {
+        if (input[4] == '.' && input[7] == '.' && input[10] == '_' && input[13] == ':' && input[16] == ':') {
+            is_data_valid = true;
+        }
+    }
+
+    ui->confirmData->setEnabled(is_sum_valid && is_address_valid && is_data_valid);
+}
+
+void MainWindow::on_lineEditSum_editingFinished()
+{
+    int length = ui->lineEditSum->text().length();
+    for(int i = 0; i < (7 - length); ++i)
+    {
+        ui->lineEditSum->setText("0" + ui->lineEditSum->text());
+    }
+}
+
+void MainWindow::on_addButton_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(2);
 }
