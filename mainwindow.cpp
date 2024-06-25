@@ -136,7 +136,7 @@ void MainWindow::readTransactions(const QByteArray &data)
 
                 QString currentHash = transactionData.at(3);
                 bool hashMismatch = !previousHash.isEmpty() && (currentHash != previousHash);
-                QString calculatedHash = calculateHash256(transactionData.mid(0, 3));
+                QString calculatedHash = calculateHash256(transactionData.mid(0, 4));
 
                 ui->tableWidget->insertRow(row);
                 for (int col = 0; col < 3; ++col) {
