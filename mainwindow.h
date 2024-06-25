@@ -31,6 +31,8 @@ private slots:
 
     void on_addButton_clicked();
 
+    void on_lineEditSum_editingFinished();
+
 private:
     Ui::MainWindow *ui;
 

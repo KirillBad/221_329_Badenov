@@ -188,23 +188,58 @@ void MainWindow::on_authButton_clicked()
 
 void MainWindow::on_lineEditSum_textChanged(const QString &arg1)
 {
+    ui->confirmData->setEnabled(false);
 
+    QString input = arg1.trimmed();
+
+    if (input.length() == 7) {
+        for (const QChar &ch : input) {
+            if (!ch.isDigit()) {
+                break;
+            }
+        }
+        ui->confirmData->setEnabled(true);
+    }
 }
 
 void MainWindow::on_lineEditAddress_textChanged(const QString &arg1)
 {
+    ui->confirmData->setEnabled(false);
 
+    QString input = arg1.trimmed();
+
+    if (input.length() == 6) {
+        for (const QChar &ch : input) {
+            if (!ch.isDigit()) {
+                break;
+            }
+        }
+        ui->confirmData->setEnabled(true);
+    }
 }
 
 
 void MainWindow::on_lineEditData_textChanged(const QString &arg1)
 {
+    QString input = arg1.trimmed();
 
+    if (input.length() == 19) {
+        if (input[4] == '.' || input[7] == '.' || input[10] == '_' || input[13] == ':' || input[16] == ':') {
+            return;
+        }
+    }
 }
 
+void MainWindow::on_lineEditSum_editingFinished()
+{
+    int length = ui->lineEditSum->text().length();
+    for(int i = 0; i < (7 - length); ++i)
+    {
+        ui->lineEditSum->setText("0" + ui->lineEditSum->text());
+    }
+}
 
 void MainWindow::on_addButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(2);
 }
-
