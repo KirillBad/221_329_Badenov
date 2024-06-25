@@ -22,5 +22,7 @@ private:
     Ui::MainWindow *ui;
 
     void readTransactions(const QString &filePath);
+
+    QString calculateHash256(const QStringList &data);
 };
 #endif // MAINWINDOW_H

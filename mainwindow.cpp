@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QMessageBox>
+#include <QCryptographicHash>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,6 +21,17 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+QString MainWindow::calculateHash256(const QStringList &data) {
+    QString combinedString = data.join("");
+    QByteArray byteArray = combinedString.toUtf8();
+    QByteArray hash = QCryptographicHash::hash(byteArray, QCryptographicHash::Sha256);
+    QString hashString = hash.toHex();
+
+    // qDebug() << hashString;
+
+    return hashString;
+}
+
 void MainWindow::readTransactions(const QString &filePath)
 {
     QFile file(filePath);
@@ -30,21 +42,40 @@ void MainWindow::readTransactions(const QString &filePath)
 
     QTextStream in(&file);
     QStringList transactionData;
+    QString previousHash;
+
     int row = 0;
     while (!in.atEnd()) {
-        QString line = in.readLine().trimmed(); // Читаем строку и удаляем лишние пробелы
+        QString line = in.readLine().trimmed();
         if (!line.isEmpty()) {
             transactionData.append(line);
         } else {
-            // Если прочитали пустую строку, то добавляем данные в таблицу
-            if (transactionData.size() == 3) {
+            if (transactionData.size() == 4) {
+
+                QString currentHash = transactionData.at(3);
+                bool hashMismatch = !previousHash.isEmpty() && (currentHash != previousHash);
+                QString calculatedHash = calculateHash256(transactionData.mid(0, 3));
+
                 ui->tableWidget->insertRow(row);
                 for (int col = 0; col < 3; ++col) {
                     QTableWidgetItem *item = new QTableWidgetItem(transactionData.at(col));
-                    qDebug() << transactionData.at(col);
+                    if (hashMismatch) {
+                        item->setBackground(Qt::red);
+                    }
                     ui->tableWidget->setItem(row, col, item);
                 }
                 ++row;
+                previousHash = calculatedHash;
+                transactionData.clear();
+            } else if (transactionData.size() == 3) {
+                QString currentHash = calculateHash256(transactionData.mid(0, 3));
+                ui->tableWidget->insertRow(row);
+                for (int col = 0; col < 3; ++col) {
+                    QTableWidgetItem *item = new QTableWidgetItem(transactionData.at(col));
+                    ui->tableWidget->setItem(row, col, item);
+                }
+                ++row;
+                previousHash = currentHash;
                 transactionData.clear();
             }
         }
