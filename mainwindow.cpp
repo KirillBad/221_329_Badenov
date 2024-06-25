@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    filePath = "C:/Users/user/Desktop/221_329_Badenov/221_329_Badenov/transactions.txt";
+    filePath = "C:/Users/user/Desktop/221_329_Badenov/221_329_Badenov/transactionsDecrypted.txt";
 }
 
 MainWindow::~MainWindow()
@@ -103,8 +103,10 @@ bool MainWindow::decryptTextFile(const QString &filePath, unsigned char *key)
     encryptedFile.close();
 
     readTransactions(decryptedBytes);
+
     ui->stackedWidget->setCurrentIndex(1);
-    return ret_code;
+
+    return true;
 }
 
 QString MainWindow::calculateHash256(const QStringList &data) {
@@ -164,10 +166,8 @@ void MainWindow::readTransactions(const QByteArray &data)
 
 void MainWindow::on_openButton_clicked()
 {
-    // QString filePath = QFileDialog::getOpenFileName(this, tr("Открыть файл"), "", tr("Text Files (*.txt);;All Files (*)"));
-    // if (!filePath.isEmpty()) {
-    //     readTransactions(filePath);
-    // }
+    this->filePath = QFileDialog::getOpenFileName(this, tr("Открыть файл"), "", tr("Text Files (*.txt);;All Files (*)"));
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 void MainWindow::on_authButton_clicked()
