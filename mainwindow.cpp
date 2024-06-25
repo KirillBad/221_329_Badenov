@@ -167,7 +167,9 @@ void MainWindow::readTransactions(const QByteArray &data)
 void MainWindow::on_openButton_clicked()
 {
     this->filePath = QFileDialog::getOpenFileName(this, tr("Открыть файл"), "", tr("Text Files (*.txt);;All Files (*)"));
-    ui->stackedWidget->setCurrentIndex(0);
+    if (!filePath.isEmpty()) {
+        ui->stackedWidget->setCurrentIndex(0);
+    }
 }
 
 void MainWindow::on_authButton_clicked()
