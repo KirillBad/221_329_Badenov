@@ -43,6 +43,16 @@ else()
     endif()
 endif()
 
+include(FindOpenSSL) # средствами CMake автоматически найти установленную OpenSSL на данной машине, если это возможно
+target_include_directories(
+    221_329_Badenov
+    PRIVATE
+    C:/QT/Tools/OpenSSLv3/Win_x64/include)
+target_link_libraries(
+    221_329_Badenov # к какой цели подключать
+    PRIVATE # в каком режиме подключать
+    C:/Qt/Tools/OpenSSLv3/Win_x64/lib/libcrypto.lib) # что именно подключать
+
 target_link_libraries(221_329_Badenov PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

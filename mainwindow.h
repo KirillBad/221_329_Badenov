@@ -21,11 +21,19 @@ public:
 private slots:
     void on_openButton_clicked();
 
+    void on_authButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
-    void readTransactions(const QString &filePath);
+    QString filePath;
+
+    static int decryptQByteArray(const QByteArray& encryptedBytes, QByteArray& decryptedBytes, unsigned char *key);
+
+    void readTransactions(const QByteArray &data);
 
     QString calculateHash256(const QStringList &data);
+
+    bool decryptTextFile(const QString &filePath, unsigned char *key);
 };
 #endif // MAINWINDOW_H
