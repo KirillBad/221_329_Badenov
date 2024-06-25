@@ -23,6 +23,14 @@ private slots:
 
     void on_authButton_clicked();
 
+    void on_lineEditSum_textChanged(const QString &arg1);
+
+    void on_lineEditAddress_textChanged(const QString &arg1);
+
+    void on_lineEditData_textChanged(const QString &arg1);
+
+    void on_addButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 

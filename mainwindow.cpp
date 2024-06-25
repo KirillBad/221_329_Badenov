@@ -184,3 +184,27 @@ void MainWindow::on_authButton_clicked()
     ui->linePincode->setText("");
 
 }
+
+
+void MainWindow::on_lineEditSum_textChanged(const QString &arg1)
+{
+
+}
+
+void MainWindow::on_lineEditAddress_textChanged(const QString &arg1)
+{
+
+}
+
+
+void MainWindow::on_lineEditData_textChanged(const QString &arg1)
+{
+
+}
+
+
+void MainWindow::on_addButton_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(2);
+}
+
