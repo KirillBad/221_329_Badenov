@@ -4,6 +4,7 @@
 #include <QTextStream>
 #include <QMessageBox>
 #include <QCryptographicHash>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -27,13 +28,13 @@ QString MainWindow::calculateHash256(const QStringList &data) {
     QByteArray hash = QCryptographicHash::hash(byteArray, QCryptographicHash::Sha256);
     QString hashString = hash.toHex();
 
-    // qDebug() << hashString;
-
     return hashString;
 }
 
 void MainWindow::readTransactions(const QString &filePath)
 {
+    ui->tableWidget->setRowCount(0);
+
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::warning(this, "Ошибка", "Не удалось открыть файл");
@@ -83,3 +84,12 @@ void MainWindow::readTransactions(const QString &filePath)
 
     file.close();
 }
+
+void MainWindow::on_openButton_clicked()
+{
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Открыть файл"), "", tr("Text Files (*.txt);;All Files (*)"));
+    if (!filePath.isEmpty()) {
+        readTransactions(filePath);
+    }
+}
+
